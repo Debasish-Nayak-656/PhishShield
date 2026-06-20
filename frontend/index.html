@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhishGuard — Real-Time Phishing Detection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="brand-icon">⚔</span>
+      <span class="brand-name">Phish<span class="accent">Guard</span></span>
+    </div>
+    <div class="nav-links">
+      <a href="#scanner" class="nav-link active" data-section="scanner">URL Scanner</a>
+      <a href="#email" class="nav-link" data-section="email">Email Detector</a>
+      <a href="#dashboard" class="nav-link" data-section="dashboard">Dashboard</a>
+      <a href="#report" class="nav-link" data-section="report">Report Crime</a>
+    </div>
+    <div class="nav-status">
+      <span class="status-dot"></span>
+      <span class="status-text">System Online</span>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero" id="home">
+    <div class="hero-bg">
+      <div class="grid-overlay"></div>
+      <div class="scanline"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="pulse-dot"></span>
+        REAL-TIME THREAT DETECTION
+      </div>
+      <h1 class="hero-title">
+        <span class="line1">Don't Take</span>
+        <span class="line2">The <em>Bait.</em></span>
+      </h1>
+      <p class="hero-sub">Rule-based phishing detection powered by domain intelligence, behavioral analysis, and real threat databases. Zero AI. 100% explainable.</p>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num" id="hero-total">0</span><span class="stat-label">URLs Scanned</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num" id="hero-caught">0</span><span class="stat-label">Threats Caught</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num">12</span><span class="stat-label">Detection Rules</span></div>
+      </div>
+      <button class="btn-primary" onclick="scrollToSection('scanner')">
+        <span>Scan a URL</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="hero-visual">
+      <div class="terminal">
+        <div class="terminal-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="terminal-title">phishguard ~ threat-analysis</span></div>
+        <div class="terminal-body" id="terminal-demo"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <main class="main-content">
+
+    <!-- URL SCANNER -->
+    <section class="section" id="scanner">
+      <div class="section-header">
+        <div class="section-tag">01 — URL SCANNER</div>
+        <h2 class="section-title">Analyze Any URL</h2>
+        <p class="section-desc">Paste any suspicious link below. Our engine runs 12 detection rules against it instantly.</p>
+      </div>
+
+      <div class="scanner-card">
+        <div class="input-group">
+          <div class="input-icon">🔗</div>
+          <input type="text" id="url-input" class="scan-input" placeholder="https://suspicious-login.xyz/verify-account" autocomplete="off" />
+          <button class="scan-btn" id="url-scan-btn" onclick="scanURL()">
+            <span class="btn-text">Scan URL</span>
+            <span class="btn-loader" hidden>⟳</span>
+          </button>
+        </div>
+        <div class="input-hint">Try: <code>http://paypal-secure-login.xyz/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7c0a190e151a0543090f190e410513093c1b111d1510521f1311">[email&#160;protected]</a></code></div>
+
+        <div id="url-result" class="result-panel" hidden></div>
+      </div>
+    </section>
+
+    <!-- EMAIL DETECTOR -->
+    <section class="section" id="email">
+      <div class="section-header">
+        <div class="section-tag">02 — EMAIL DETECTOR</div>
+        <h2 class="section-title">Email Phishing Check</h2>
+        <p class="section-desc">Paste the full email content (headers + body) for comprehensive analysis.</p>
+      </div>
+
+      <div class="scanner-card">
+        <textarea id="email-input" class="email-input" placeholder="From: support@paypa1-security.com&#10;Subject: URGENT: Your Account Has Been Suspended!&#10;&#10;Dear Customer,&#10;&#10;We have detected unusual activity on your PayPal account. Click here immediately to verify your credentials or your account will be permanently suspended within 24 hours..."></textarea>
+        <button class="scan-btn email-btn" onclick="scanEmail()">
+          <span class="btn-text">Analyze Email</span>
+          <span class="btn-loader" hidden>⟳</span>
+        </button>
+        <div id="email-result" class="result-panel" hidden></div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section class="section" id="dashboard">
+      <div class="section-header">
+        <div class="section-tag">03 — DASHBOARD</div>
+        <h2 class="section-title">Threat Intelligence</h2>
+        <p class="section-desc">Live statistics from all scans performed through PhishGuard.</p>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="dash-card dash-total">
+          <div class="dash-icon">📡</div>
+          <div class="dash-num" id="d-total">—</div>
+          <div class="dash-label">Total Scans</div>
+        </div>
+        <div class="dash-card dash-phishing">
+          <div class="dash-icon">🚨</div>
+          <div class="dash-num" id="d-phishing">—</div>
+          <div class="dash-label">Phishing Detected</div>
+        </div>
+        <div class="dash-card dash-suspicious">
+          <div class="dash-icon">⚠️</div>
+          <div class="dash-num" id="d-suspicious">—</div>
+          <div class="dash-label">Suspicious</div>
+        </div>
+        <div class="dash-card dash-safe">
+          <div class="dash-icon">✅</div>
+          <div class="dash-num" id="d-safe">—</div>
+          <div class="dash-label">Safe</div>
+        </div>
+      </div>
+
+      <div class="recent-scans">
+        <h3 class="recent-title">Recent Scans</h3>
+        <div id="recent-list" class="recent-list">
+          <div class="loading-row">Loading scan history...</div>
+        </div>
+      </div>
+      <button class="btn-secondary" onclick="loadDashboard()">↻ Refresh Stats</button>
+    </section>
+
+    <!-- REPORT SECTION -->
+    <section class="section" id="report">
+      <div class="section-header">
+        <div class="section-tag">04 — REPORT CYBERCRIME</div>
+        <h2 class="section-title">How to Report</h2>
+        <p class="section-desc">If you've encountered or fallen victim to a phishing attack, report it immediately through these official Indian government channels.</p>
+      </div>
+
+      <div class="report-grid">
+        <a href="https://cybercrime.gov.in" target="_blank" class="report-card primary-report">
+          <div class="report-icon">🇮🇳</div>
+          <div class="report-info">
+            <div class="report-name">National Cyber Crime Reporting Portal</div>
+            <div class="report-url">cybercrime.gov.in</div>
+            <div class="report-desc">Official portal by Ministry of Home Affairs. Report all cybercrime complaints here including phishing, fraud, and online harassment.</div>
+          </div>
+          <div class="report-arrow">→</div>
+        </a>
+
+        <div class="report-card">
+          <div class="report-icon">📞</div>
+          <div class="report-info">
+            <div class="report-name">Cyber Crime Helpline</div>
+            <div class="report-url">Call: 1930</div>
+            <div class="report-desc">National helpline for cybercrime victims. Available for immediate assistance with financial frauds, phishing, and online scams.</div>
+          </div>
+        </div>
+
+        <a href="https://www.cert-in.org.in" target="_blank" class="report-card">
+          <div class="report-icon">🛡️</div>
+          <div class="report-info">
+            <div class="report-name">CERT-In</div>
+            <div class="report-url">cert-in.org.in</div>
+            <div class="report-desc">Indian Computer Emergency Response Team. Report phishing websites and malware. They coordinate with hosting providers for takedowns.</div>
+          </div>
+          <div class="report-arrow">→</div>
+        </a>
+
+        <a href="https://www.i4c.mha.gov.in" target="_blank" class="report-card">
+          <div class="report-icon">🏛️</div>
+          <div class="report-info">
+            <div class="report-name">I4C — Indian Cyber Crime Coordination Centre</div>
+            <div class="report-url">i4c.mha.gov.in</div>
+            <div class="report-desc">Nodal body for coordinating cybercrime investigations across India. Works with state police forces.</div>
+          </div>
+          <div class="report-arrow">→</div>
+        </a>
+      </div>
+
+      <div class="steps-card">
+        <h3 class="steps-title">🚨 If You Were Phished — Act Now</h3>
+        <div class="steps-list">
+          <div class="step"><div class="step-num">01</div><div class="step-text"><strong>Disconnect</strong> — Go offline immediately to prevent further data exfiltration</div></div>
+          <div class="step"><div class="step-num">02</div><div class="step-text"><strong>Change Passwords</strong> — All accounts that use the same password as the compromised one</div></div>
+          <div class="step"><div class="step-num">03</div><div class="step-text"><strong>Contact Your Bank</strong> — Call immediately if financial credentials were involved</div></div>
+          <div class="step"><div class="step-num">04</div><div class="step-text"><strong>Report</strong> — File a complaint at cybercrime.gov.in or call 1930</div></div>
+          <div class="step"><div class="step-num">05</div><div class="step-text"><strong>Document</strong> — Take screenshots of the phishing page and all communications as evidence</div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="brand-icon">⚔</span> Phish<span class="accent">Guard</span>
+      </div>
+      <div class="footer-note">Built for educational purposes · Rule-based detection · No AI · Open Source</div>
+      <div class="footer-links">
+        <a href="https://cybercrime.gov.in" target="_blank">Report Cybercrime</a>
+        <span>·</span>
+        <a href="https://www.cert-in.org.in" target="_blank">CERT-In</a>
+        <span>·</span>
+        <a
